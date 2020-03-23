@@ -1,4 +1,6 @@
 from Objects import Passenger, Floor, Elevator
+import pygame
+from animations import animation_init, animation_update
 import random
 
 DisplayWidth = 1280
@@ -23,38 +25,6 @@ class ElevatorNetwork:
         self.elevator.target_passenger = ""
         self.elevator.target = 'ground'
         self.elevator.second_target = ''
-
-    def animation_init(self):
-        import pygame
-        print("hello")
-        pygame.init()
-        pygame.font.init()
-        pygame.display.set_caption("Elevator Simulation")
-        self.elevator.image = pygame.image.load('lift.png')
-        self.elevator.image = pygame.transform.scale(self.image, (100, 100))
-        self.game_display = pygame.display.set_mode((DisplayWidth, DisplayHeight))
-        self.game_clock = pygame.time.Clock()
-        self.animation = True
-        self.elevator.elevator_pygame()
-        self.simulation()
-
-
-    def message_display(self, text, font_size, text_x, text_y, colour):  # Function to simplify displaying messages
-        font = pygame.font.Font("freesansbold.ttf", font_size)  # uses font module to create a font
-        display_text = font.render(str(text), True, colour)  # Creates the font with the text and the colour
-        self.game_display.blit(display_text, [text_x, text_y])  # Places to the x and y locations
-
-    def animation_update(self):
-        self.game_display.fill(White)
-        for floor in self.floors:
-            pygame.draw.rect(self.game_display, Black, (floor.x - 100, floor.y + 90, 100, 10))
-            self.message_display(floor.name, 20, floor.x - 75, floor.y + 70, Black)
-            for passenger in range(len(floor.passengers)):
-                pygame.draw.rect(self.game_display, Black, (floor.x - (passenger * 15) - 15, floor.y + 110, 10, 10))
-        self.game_display.blit(self.elevator.image, (self.elevator.x, self.elevator.y))
-        self.message_display(str(len(self.elevator.passengers)) + " / " + str(self.elevator.capacity), 20, self.elevator.x + 25, self.elevator.y - 20, Black)
-        pygame.display.update()
-        self.game_clock.tick(self.frame_rate)
 
     def new_passengers(self, passenger_num):
         for floor in self.floors:
@@ -172,6 +142,9 @@ class ElevatorNetwork:
             self.elevator.target = 'ground'
             self.elevator.second_target = ''
 
+    def py_animation(self):
+        animation_init(self)
+
     def simulation(self):
         """
         """
@@ -198,7 +171,7 @@ class ElevatorNetwork:
             self.time += self.frame_rate
             self.real_time = self.time/self.frame_rate
             if self.animation:
-                self.animation_update()
+                animation_update(self)
             self.elevator.update_position()
 
 
@@ -216,4 +189,4 @@ passengers_1 = []
 Model_1 = ElevatorNetwork(floors_1, elevator_1, passengers_1, 100, 2, 'linear')
 # Model.mode = ['linear', 'first come', 'point system']
 
-Model_1.simulation()
+Model_1.py_animation()
