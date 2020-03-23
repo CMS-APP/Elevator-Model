@@ -1,5 +1,4 @@
 import random
-import pygame
 
 DisplayWidth = 1280
 DisplayHeight = 720
@@ -33,8 +32,6 @@ class Elevator:
         self.mode = mode
         self.capacity = capacity
         self.passengers = passengers
-        self.image = pygame.image.load('lift.png')
-        self.image = pygame.transform.scale(self.image, (100, 100))
 
     def update_position(self):
         self.y += self.speed * self.direction
@@ -49,8 +46,6 @@ class ElevatorNetwork:
         self.frame_rate = frame_rate
         self.mode = mode
         self.modes = ['linear', 'first_come', 'point_system']
-        self.game_display = pygame.display.set_mode((DisplayWidth, DisplayHeight))
-        self.game_clock = pygame.time.Clock()
         self.animation = False
         self.real_time = 0
         self.time = 0
@@ -60,11 +55,19 @@ class ElevatorNetwork:
         self.elevator.second_target = ''
 
     def animation_init(self):
+        import pygame
+        print("hello")
         pygame.init()
         pygame.font.init()
         pygame.display.set_caption("Elevator Simulation")
+        self.elevator.image = pygame.image.load('lift.png')
+        self.elevator.image = pygame.transform.scale(self.image, (100, 100))
+        self.game_display = pygame.display.set_mode((DisplayWidth, DisplayHeight))
+        self.game_clock = pygame.time.Clock()
         self.animation = True
+        self.elevator.elevator_pygame()
         self.simulation()
+
 
     def message_display(self, text, font_size, text_x, text_y, colour):  # Function to simplify displaying messages
         font = pygame.font.Font("freesansbold.ttf", font_size)  # uses font module to create a font
@@ -102,7 +105,6 @@ class ElevatorNetwork:
         for elevator_passenger in self.elevator.passengers:
             if elevator_passenger.destination == floor.name:
                 leaving_passengers.append(elevator_passenger)
-
         if len(leaving_passengers) >= 1:
             all_elevator_alight = False
             for leaving_passenger in leaving_passengers:
@@ -124,8 +126,7 @@ class ElevatorNetwork:
                 elif len(self.elevator.passengers) == self.elevator.capacity:
                     all_elevator_board = True
 
-        if all_elevator_alight and all_elevator_board:
-            self.elevator.speed, self.elevator.mode = 0, 'idle'
+        return all_elevator_alight, all_elevator_board
 
     def linear_simulation(self):
         """ A linear simulation of an elevator, moving up and down like a bus.
@@ -149,13 +150,18 @@ class ElevatorNetwork:
                             self.elevator.speed, self.elevator.mode = 0, 'boarding'
 
                     elif self.elevator.mode == 'boarding':
-                        self.stationary_events(floor)
-                        self.elevator.speed, self.elevator.mode = 10, 'moving'
-
+                        all_elevator_alight, all_elevator_board = self.stationary_events(floor)
+                        if all_elevator_alight and all_elevator_board:
+                            self.elevator.speed, self.elevator.mode = 10, 'leaving'
+                        else:
+                            self.elevator.speed, self.elevator.mode = 0, 'boarding'
                     elif self.elevator.mode == 'turning':
                         self.elevator.speed, self.elevator.mode = 10, 'leaving'
+
+                    elif self.elevator.mode == 'idle':
+                        self.elevator.speed, self.elevator.mode = 10, 'leaving'
         else:
-            self.elevator.mode = 'moving'
+            self.elevator.speed, self.elevator.mode = 10, 'moving'
 
     def first_come(self):
         """
@@ -197,13 +203,18 @@ class ElevatorNetwork:
             self.elevator.second_target = ''
 
     def simulation(self):
+        """
+        """
         passenger_num = 0
-        while self.time <= 100 or self.animation:
+        while self.time <= 1000 or self.animation:
+
             if self.animation:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         quit()
+
             passenger_num = self.new_passengers(passenger_num)
+
             if self.mode in self.modes:
                 if self.mode == 'linear':
                     self.linear_simulation()
@@ -213,24 +224,26 @@ class ElevatorNetwork:
                     quit()
             else:
                 quit()
+                
             self.time += self.frame_rate
             self.real_time = self.time/self.frame_rate
             if self.animation:
                 self.animation_update()
             self.elevator.update_position()
 
+
 floor_0 = Floor('ground', 'end', 600, 350, 0.03, [])
 floor_1 = Floor('1st', 'not_end', 600, 250, 0.01, [])
-floor_2 = Floor('2nd', 'end', 600, 150, 0.01, [])
+floor_2 = Floor('2nd', 'not-end', 600, 150, 0.01, [])
 floor_3 = Floor('3rd', 'end', 600, 50, 0.01, [])
 floors_1 = [floor_0, floor_1, floor_2, floor_3]
 
 elevator_1 = Elevator(600, 350, -1, 10, 'leaving', 10, [])
-# elevator.mode = ['leaving','moving','stationary','turning']
+# elevator.mode = ['idle','leaving','moving','turning',]
 
 passengers_1 = []
 
-Model_1 = ElevatorNetwork(floors_1, elevator_1, passengers_1, 100, 2, 'first_come')
+Model_1 = ElevatorNetwork(floors_1, elevator_1, passengers_1, 100, 2, 'linear')
 # Model.mode = ['linear', 'first come', 'point system']
 
-Model_1.animation_init()
+Model_1.simulation()
