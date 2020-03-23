@@ -1,4 +1,4 @@
-from elevator_sim.objects import Passenger, Floor, Elevator
+from elevator_sim.objects import Floor, Elevator
 from elevator_sim.animations import animation_init, animation_update
 from elevator_sim.elevator_network import ElevatorNetwork
 import pygame
@@ -53,6 +53,6 @@ elevator_1 = Elevator(600, 350, -1, 10, 'leaving', 10, [])
 passengers_1 = []
 
 Model_1 = ElevatorSim(floors_1, elevator_1, passengers_1, 100, 2, 'linear')
-# Model.mode = ['linear', 'first come', 'point system']
+# Model.mode = ['linear', 'first_come', 'point_system']
 
-Model_1.py_animation()
+Model_1.simulation()

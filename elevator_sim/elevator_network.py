@@ -1,4 +1,6 @@
+from elevator_sim.objects import Passenger
 import random
+
 
 class ElevatorNetwork:
     def __init__(self, floors, elevator, passengers, time_limit, frame_rate, mode):
@@ -29,7 +31,7 @@ class ElevatorNetwork:
                 print("(" + str(self.real_time) + " wait), " + passenger.name + ", " + floor.name + ", " + passenger.destination)
         return passenger_num
 
-    def stationary_events(self, floor):
+    def idle_events(self, floor):
         all_elevator_alight = True
         all_elevator_board = True
         leaving_passengers = []
@@ -82,7 +84,7 @@ class ElevatorNetwork:
                             self.elevator.speed, self.elevator.mode = 0, 'boarding'
 
                     elif self.elevator.mode == 'boarding':
-                        all_elevator_alight, all_elevator_board = self.stationary_events(floor)
+                        all_elevator_alight, all_elevator_board = self.idle_events(floor)
                         if all_elevator_alight and all_elevator_board:
                             self.elevator.speed, self.elevator.mode = 10, 'leaving'
                         else:
@@ -104,7 +106,7 @@ class ElevatorNetwork:
         for floor in self.floors:
             if self.elevator.y == floor.y and self.elevator.target == floor.name:
                 self.elevator.speed, self.elevator.mode = 0, 'boarding'
-                self.stationary_events(floor)
+                self.idle_events(floor)
                 if self.elevator.mode == 'idle':
                     target_reached = True
                     if self.elevator.second_target != '':
