@@ -1,7 +1,6 @@
-from Objects import Passenger, Floor, Elevator
-import pygame
-from animations import animation_init, animation_update
-import random
+from elevator_sim.objects import Passenger, Floor, Elevator
+from elevator_sim.animations import animation_init, animation_update
+import pygame, random
 
 DisplayWidth = 1280
 DisplayHeight = 720
