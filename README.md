@@ -2,7 +2,7 @@
 
 Small project which uses the pygame module to show an elevator moving up and down. The elevator picks up passengers and drops them off at other locations.
 
-## Elevator Modes:
+## Elevator Modes
 
 There are two modes avaliable in this program:
  * Linear - Elevator moves up and down the page
@@ -10,6 +10,15 @@ There are two modes avaliable in this program:
  
 ## Getting Started
 
-'''
-Sample text
-'''
+When selecting which mode to use, change the mode parameter 'mode' to either 'linear' or 'first_come'.
+
+```
+ElevatorSim(floors, elevator, passengers, 100, 2, mode)
+```
+
+For example
+
+```
+ElevatorSim(floors, elevator, passengers, 100, 2, 'linear')
+ElevatorSim(floors, elevator, passengers, 100, 2, 'first_come')
+```
