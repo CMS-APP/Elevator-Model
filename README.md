@@ -10,7 +10,7 @@ There are two modes avaliable in this program:
  
 ## Getting Started
 
-When selecting which mode to use, change the mode parameter 'mode' to either 'linear' or 'first_come'.
+When selecting which mode to use, change the mode parameter 'mode' to either 'linear' or 'first_come' in the main.py file.
 
 ```
 ElevatorSim(floors, elevator, passengers, 100, 2, mode)
@@ -22,3 +22,7 @@ For example
 ElevatorSim(floors, elevator, passengers, 100, 2, 'linear')
 ElevatorSim(floors, elevator, passengers, 100, 2, 'first_come')
 ```
+
+## Running Application
+
+After selecting the mode you would like to use, run the main.py file
