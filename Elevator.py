@@ -38,10 +38,10 @@ class ElevatorSim(ElevatorNetwork):
             self.elevator.update_position()
 
 
-floor_0 = Floor('ground', 'end', 600, 350, 0.03, [])
-floor_1 = Floor('1st', 'not_end', 600, 250, 0.02, [])
-floor_2 = Floor('2nd', 'not-end', 600, 150, 0.02, [])
-floor_3 = Floor('3rd', 'end', 600, 50, 0.02, [])
+floor_0 = Floor('ground', 'end', 600, 350, 0.00, [])
+floor_1 = Floor('1st', 'not_end', 600, 250, 0.00, [])
+floor_2 = Floor('2nd', 'not-end', 600, 150, 0.015, [])
+floor_3 = Floor('3rd', 'end', 600, 50, 0.00, [])
 floors = [floor_0, floor_1, floor_2, floor_3]
 
 elevator = Elevator(600, 350, -1, 10, 'leaving', 10, [])
